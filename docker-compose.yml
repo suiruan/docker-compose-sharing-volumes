@@ -1,0 +1,28 @@
+version: '3' 
+
+services: 
+ 
+  batch_tools:
+    image: busybox
+ 
+    volumes:
+      - batch_volume:/var/lib/brains/.brainspace/BatchTools
+
+    env_file:
+      - environments.env
+  
+  analysis_server:
+    build: ./analysis_server
+    
+    volumes:
+      - batch_volume:/var/lib/brains/.brainspace/BatchTools
+    
+    depends_on:
+      - batch_tools 
+
+    env_file:
+      - environments.env
+   
+
+volumes:
+  batch_volume:
