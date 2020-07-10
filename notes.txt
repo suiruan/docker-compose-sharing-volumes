@@ -1,7 +1,4 @@
-## assignment
-	volume contain different things depend on variable
-
-
+## to test batch_tools individualy
 
 export CORE_VERSION=line.6.3-githash-d59645acf
 docker-compose up -d 
@@ -14,26 +11,35 @@ docker build -t batch_tools .
 
 docker run -e CORE_VERSION=line.6.3-githash-d59645acf batch_tools
 
-cd wb
+cd web
 
 docker build -t web .
 
 
-## Pass variables into Dockerfile through Docker Compose during build
+## verify 
 
-docker-compose build --build-arg GIT_PERSONAL_ACCESS_TOKEN="{TOKEN}"
+$ docker volume inspect 
 
-If you want to pass variables through the docker-compose process into any of the Dockerfiles present within docker-compose.yml, use the --build-arg parameter for each argument to flow into all of the Dockerfiles.
+docker-compose-sharing-volumes_batch_volume
+[
+    {
+        "CreatedAt": "2020-07-10T14:21:29Z",
+        "Driver": "local",
+        "Labels": {
+            "com.docker.compose.project": "docker-compose-sharing-volumes",
+            "com.docker.compose.version": "1.23.2",
+            "com.docker.compose.volume": "batch_volume"
+        },
+        "Mountpoint": "/var/lib/docker/volumes/docker-compose-sharing-volumes_batch_volume/_data",
+        "Name": "docker-compose-sharing-volumes_batch_volume",
+        "Options": null,
+        "Scope": "local"
+    }
+]
 
 
-
-Example Dockerfile, which is referenced in docker-compose.yml:
-
-FROM node:10
-# Create our git credentials
-ARG GIT_PERSONAL_ACCESS_TOKEN
-RUN echo "https://${GIT_PERSONAL_ACCESS_TOKEN}@github.com" > /root/.git-credentials
-
-WORKDIR /usr/src/app
-VOLUME /usr/src/app
-CMD npm install && npm start
+$ docker-compose ps
+                      Name                                    Command               State    Ports
+--------------------------------------------------------------------------------------------------
+docker-compose-sharing-volumes_analysis_server_1   /bin/sh -c ./start_server. ...   Exit 0        
+docker-compose-sharing-volumes_batch_tools_1       sh                               Exit 0     
