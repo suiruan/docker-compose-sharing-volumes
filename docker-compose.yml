@@ -3,7 +3,7 @@ version: '3'
 services: 
  
   batch_tools:
-    image: busybox
+    build: ./batch_tools
  
     volumes:
       - batch_volume:/var/lib/brains/.brainspace/BatchTools
@@ -11,11 +11,23 @@ services:
     env_file:
       - environments.env
   
+  app:
+    build: ./app
+    
+    volumes:
+      - batch_volume:/var/lib/brains/.brainspace/BatchTools:ro
+    
+    depends_on:
+      - batch_tools 
+
+    env_file:
+      - environments.env  
+
   analysis_server:
     build: ./analysis_server
     
     volumes:
-      - batch_volume:/var/lib/brains/.brainspace/BatchTools
+      - batch_volume:/var/lib/brains/.brainspace/BatchTools:ro
     
     depends_on:
       - batch_tools 
