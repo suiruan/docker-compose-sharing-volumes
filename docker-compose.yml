@@ -10,13 +10,20 @@ services:
 
     env_file:
       - environments.env
-  
+
+  basis_tech:
+    image: basis-tech:${BASIS_TECH_VERSION}
+    volumes:
+      - basis_tech_volume:/var/lib/brains/.brainspace/BasisTech
+
+
   app:
     build: ./app
     
     volumes:
       - batch_volume:/var/lib/brains/.brainspace/BatchTools:ro
-    
+      - basis_tech_volume:/var/lib/brains/.brainspace/BasisTech
+
     depends_on:
       - batch_tools 
 
@@ -28,13 +35,16 @@ services:
     
     volumes:
       - batch_volume:/var/lib/brains/.brainspace/BatchTools:ro
-    
+      - basis_tech_volume:/var/lib/brains/.brainspace/BasisTech
+
     depends_on:
       - batch_tools 
-
+      - basis_tech
+      
     env_file:
       - environments.env
    
 
 volumes:
   batch_volume:
+  basis_tech_volume:
